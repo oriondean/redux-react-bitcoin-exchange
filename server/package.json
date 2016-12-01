@@ -1,0 +1,26 @@
+{
+  "name": "bitcoin-exchange-2-server",
+  "version": "0.0.1",
+  "description": "Server-side code for bitcoin exchange 2",
+  "author": "Dean Kerr <dean_k@live.co.uk>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oriondean/bitcoin-exchange-2"
+  },
+  "bugs": {
+    "url": "https://github.com/oriondean/bitcoin-exchange-2/issues"
+  },
+  "keywords": [
+    "bitcoin",
+    "bitcoin-exchange"
+  ],
+  "dependencies": {
+    "underscore": "1.8.3",
+    "socket.io": "^1.4.4"
+  },
+  "devDependencies": {
+    "jasmine": "2.4.1"
+  },
+  "private": true,
+  "license": "MIT"
+}

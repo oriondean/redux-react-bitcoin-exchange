@@ -1,0 +1,4 @@
+.aggregated-order-book-container { height: 250px; overflow: hidden; }
+.aggregated-order-book-container .book-header span, .aggregated-order-book .tier span {  display: inline-block; width: 50%; padding: 0 20px;   }
+.aggregated-order-book-container .book-header { font-weight: bold; }
+.aggregated-order-book:not(:last-child) { margin-bottom: 20px; }

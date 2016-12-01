@@ -1,0 +1,11 @@
+body { margin-top: 50px; font-family: opensans, sans-serif; background-color: #FAFAFA; }
+.navbar { background-color: #263238; }
+.navbar-brand { color: #ECEFF1; }
+
+.header { background-color: #37474F; padding: 10px 20px; margin: 0; color: #ECEFF1; border-bottom: 1px solid #37474F; font-weight: bold; }
+.panel-container { background-color: white; border: 1px solid #37474F; margin-top: 20px; }
+
+.bid { color: #B71C1C; }
+.ask { color: #1B5320;}
+
+.right { text-align: right; }

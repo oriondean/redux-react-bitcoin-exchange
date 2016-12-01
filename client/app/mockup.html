@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bitcoin Exchange</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        body { margin-top: 50px; font-family: opensans, sans-serif; background-color: #FAFAFA; }
+        .navbar { background-color: #263238; }
+        .navbar-brand { color: #ECEFF1; }
+
+        .header { background-color: #37474F; padding: 10px 20px; margin: 0; color: #ECEFF1; border-bottom: 1px solid #37474F; font-weight: bold; }
+        .panel-container { background-color: white; border: 1px solid #37474F; margin-top: 20px; }
+
+        .order-book-container .book-header { font-weight: bold; }
+        .aggregated-order-book:not(:last-child) { margin-bottom: 20px; }
+        .order-book-container .book-header span, .aggregated-order-book .tier span { display: inline-block; width: 50%; padding: 0 20px; }
+
+        .order-entry .btn-bid { float: right; margin-left: 10px; }
+        .order-entry .btn-ask { float: right; }
+        .order-entry form { margin: 10px 20px; }
+
+        .account-selector { margin: 20px 0; }
+        .account-selector select { margin: 10px; width: 92% }
+
+        .trade-timeline { height: 235px; margin: 0; }
+        .order-depth { height: 230px; }
+
+        .trade-history-container { margin: 20px 0; }
+        .trade-history-container .history-header { font-weight: bold; }
+        .trade-history-container .history-header span, .trade-history .trade span { display: inline-block; }
+        .trade-history-container .price { width: 20%; }
+        .trade-history-container .quantity { width: 25%; }
+        .trade-history-container .aggressor { width: 20%; padding-left: 5px; }
+        .trade-history-container .time { width: 30%; }
+
+        .private-order-book-container { height: 265px; overflow: auto; margin: 0; }
+        .private-order-book .private-order { border: 1px solid #37474F; display: inline-block; margin: 4px;   }
+        .private-order .id { background-color: #546E7A; font-weight: bold; color: white; text-align: center; }
+        .private-order .quantity > span { display: inline-block; border-bottom: 1px solid #37474F; padding: 0 5px; text-align: center; }
+        .private-order-book .quantity > span:first-child { border-right: 1px solid #37474F; }
+        .private-order .quantity-header { font-weight: bold; }
+        .private-order .pricing { border-bottom: 1px solid #37474F; text-align: center; }
+        .private-order .pricing .price { font-weight: bold; }
+        .private-order .time { font-style: italic; text-align: center; }
+
+        .bid { color: #B71C1C; }
+        .ask { color: #1B5320;}
+
+        .right { text-align: right; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Bitcoin Exchange</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="order-book-container panel-container">
+                    <h5 class="header">ORDER BOOK</h5>
+                    <div class="book-header">
+                        <span class="price right">Market Size</span><span class="quantity right">Price</span>
+                    </div>
+                    <div class="aggregated-order-book bidSide">
+                        <div class="tier"><span class="quantity right">4.05000000</span><span class="price right bid">382.09</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">381.84</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">381.33</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">381.30</span></div>
+                        <div class="tier"><span class="quantity right">0.25000000</span><span class="price right bid">381.14</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">381.10</span></div>
+                        <div class="tier"><span class="quantity right">9.61206000</span><span class="price right bid">381.06</span></div>
+                        <div class="tier"><span class="quantity right">0.01000000</span><span class="price right bid">380.78</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">380.74</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">380.65</span></div>
+                        <div class="tier"><span class="quantity right">0.38321712</span><span class="price right bid">380.63</span></div>
+                        <div class="tier"><span class="quantity right">0.02000000</span><span class="price right bid">380.62</span></div>
+                        <div class="tier"><span class="quantity right">0.03152334</span><span class="price right bid">380.50</span></div>
+                    </div>
+                    <div class="aggregated-order-book askSide">
+                        <div class="tier"><span class="quantity right">3.69000000</span><span class="price right ask">380.03</span></div>
+                        <div class="tier"><span class="quantity right">0.03000000</span><span class="price right ask">379.97</span></div>
+                        <div class="tier"><span class="quantity right">0.07800000</span><span class="price right ask">379.96</span></div>
+                        <div class="tier"><span class="quantity right">0.03000000</span><span class="price right ask">379.93</span></div>
+                        <div class="tier"><span class="quantity right">0.01000000</span><span class="price right ask">379.89</span></div>
+                        <div class="tier"><span class="quantity right">3.60000000</span><span class="price right ask">379.88</span></div>
+                        <div class="tier"><span class="quantity right">3.69700000</span><span class="price right ask">379.87</span></div>
+                        <div class="tier"><span class="quantity right">0.13000000</span><span class="price right ask">379.86</span></div>
+                        <div class="tier"><span class="quantity right">0.03000000</span><span class="price right ask">379.83</span></div>
+                        <div class="tier"><span class="quantity right">0.08300000</span><span class="price right ask">379.81</span></div>
+                        <div class="tier"><span class="quantity right">0.03000000</span><span class="price right ask">379.80</span></div>
+                        <div class="tier"><span class="quantity right">6.30000000</span><span class="price right ask">379.77</span></div>
+                        <div class="tier"><span class="quantity right">0.08700000</span><span class="price right ask">379.76</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 main">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="order-entry panel-container">
+                            <h5 class="header">ORDER ENTRY</h5>
+                            <form class="form-inline">
+                                <input type="number" class="form-control" id="quantity-field" placeholder="Quantity" />
+                                <input type="number" class="form-control" id="price-field" placeholder="Price">
+                                <button type="button" class="btn btn-default disabled">Limit</button>
+                                <button type="button" class="btn btn-default btn-bid bid right">Place Bid</button>
+                                <button type="button" class="btn btn-default btn-ask ask right">Place Ask</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="account-selector panel-container">
+                            <h5 class="header">ACCOUNT SELECTOR</h5>
+                                <select name="account-selector" id="account-selector" class="form-control">
+                                    <option value="jmadden">John Madden</option>
+                                    <option value="dkerr">Dean Kerr</option>
+                                    <option value="mcurie">Marie Curie</option>
+                                    <option value="hworld">Hello World</option>
+                                    <option value="cbanks">Carlton Banks</option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                    <div class="trade-timeline panel-container">
+                        <h5 class="header">TRADE TIMELINE</h5>
+                    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="order-depth panel-container">
+                            <h5 class="header">ORDER DEPTH</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="trade-history-container panel-container">
+                    <h5 class="header">TRADE HISTORY</h5>
+                    <div class="history-header">
+                        <span class="price right">Price</span><span class="quantity right">Quantity</span><span class="aggressor">Aggressor</span><span class="time">Time</span>
+                    </div>
+                    <div class="trade-history">
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor ask">Ask</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor ask">Ask</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor ask">Ask</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                        <div class="trade"><span class="price right">467.93</span><span class="quantity right">0.5919684923</span><span class="aggressor bid">Bid</span><span class="time">2 days, 3 hours ago</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="private-order-book-container panel-container">
+                    <h5 class="header">MY ORDERS</h5>
+                    <div class="private-order-book">
+                        <div class="private-order">
+                            <div class="id">ORDER #10312</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10312</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10313</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10314</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10315</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10316</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10317</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10318</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10319</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10320</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10321</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10322</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10323</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10324</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10325</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10326</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action bid">Bid</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10327</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10328</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10329</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                        <div class="private-order">
+                            <div class="id">ORDER #10330</div>
+                            <div class="quantity">
+                                <span class="initial"><span class="quantity-header">Quantity</span><br/>9.61206000</span><span class="remaining"><span class="quantity-header">Remaining</span><br/>4.12361553</span>
+                            </div>
+                            <div class="pricing"><span class="action ask">Ask</span> @ <span class="price">381.06</span></div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

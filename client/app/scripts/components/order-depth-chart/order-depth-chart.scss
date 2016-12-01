@@ -1,0 +1,21 @@
+$header-height: 35px;
+$bid-colour: #B71C1C;
+$ask-colour: #1B5320;
+
+.order-depth-chart-container {
+  height: 300px;
+  position: relative;
+
+  .header {
+    height: $header-height;
+  }
+
+  .order-depth-chart {
+    margin: 5px 20px;
+    height: calc(100% - #{$header-height});
+
+    .bid-depth { fill: transparentize($bid-colour, 0.5); }
+    .ask-depth { fill: transparentize($ask-colour, 0.5); }
+  }
+}
+
