@@ -1,10 +1,29 @@
 import * as ActionTypes from '../constants/action-types';
-import * as APIMappings from '../constants/api-mappings';
-import Socket from '../connection/socket';
+
+const host = 'http://localhost:3000';
+
+const headers = new Headers({
+  'Content-Type': 'application/json; charset=UTF-8',
+});
+
+const handleResponse = (data, dispatch) => {
+  dispatch({
+    type: ActionTypes.ORDER_DEPTH_UPDATES.REFRESH, data: data.bidAggregatedOrderBook, orderAction: 'bid',
+  });
+  dispatch({
+    type: ActionTypes.ORDER_DEPTH_UPDATES.REFRESH, data: data.askAggregatedOrderBook, orderAction: 'ask',
+  });
+  dispatch({
+    type: ActionTypes.ORDER_BOOK_UPDATES.REFRESH, data: data.privateOrderBook,
+  });
+  dispatch({
+    type: ActionTypes.TRADE_HISTORY_UPDATES.REFRESH, data: data.tradeHistory,
+  });
+};
 
 export const changeAccount = account => (
   (dispatch) => {
-    Socket.emit('private-order-book', account);
+    // Socket.emit('private-order-book', account);
     dispatch({
       type: ActionTypes.CHANGE_ACCOUNT,
       account,
@@ -12,56 +31,22 @@ export const changeAccount = account => (
   }
 );
 
+export const retrieveState = () => (
+  (dispatch, getState) => (
+    fetch(`${host}/state/${getState().accounts.selected}`, { method: 'GET', headers })
+      .then(res => res.json())
+      .then(data => handleResponse(data, dispatch))
+  )
+);
+
 export const submitOrder = order => (
-  // TODO: Implement a server-response to sending a new order
-  Socket.emit('order', order)
-);
-
-export const subscribeOrderBook = account => (
-  (dispatch, getState) => {
-    if (getState().subscriptions.get('orderBook')) return;
-
-    Socket.emit('private-order-book', account); // subscribe
-    dispatch({ type: ActionTypes.SUBSCRIBE.ORDER_BOOK });
-
-    Socket.on('private-order-book', (updateType, data) => {
-      dispatch({
-        type: APIMappings.ORDER_BOOK[updateType],
-        data,
-      });
-    });
-  }
-);
-
-export const subscribeTradeHistory = () => (
-  (dispatch, getState) => {
-    if (getState().subscriptions.get('tradeHistory')) return;
-
-    Socket.emit('trade-history'); // subscribe
-    dispatch({ type: ActionTypes.SUBSCRIBE.TRADE_HISTORY });
-
-    Socket.on('trade-history', (updateType, data) => {
-      dispatch({
-        type: APIMappings.TRADE_HISTORY[updateType],
-        data,
-      });
-    });
-  }
-);
-
-export const subscribeOrderDepth = () => (
-  (dispatch, getState) => {
-    if (getState().subscriptions.get('orderDepth')) return;
-
-    Socket.emit('aggregated-order-book'); // subscribe
-    dispatch({ type: ActionTypes.SUBSCRIBE.ORDER_DEPTH });
-
-    Socket.on('aggregated-order-book', (updateType, orderAction, data) => {
-      dispatch({
-        type: APIMappings.ORDER_DEPTH[updateType],
-        data,
-        orderAction,
-      });
-    });
-  }
+  dispatch => (
+    fetch(`${host}/order`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(order),
+    })
+      .then(res => res.json())
+      .then(data => handleResponse(data, dispatch))
+  )
 );

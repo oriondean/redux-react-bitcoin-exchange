@@ -6,10 +6,6 @@ import OrderDepthItem from './order-depth-item';
 import './order-depth.scss';
 
 export default class OrderDepth extends PureComponent {
-  componentWillMount() {
-    this.props.subscribe();
-  }
-
   render() {
     const items = this.props.depth.map((quantity, price) => {
       const item = { price, quantity };
@@ -34,5 +30,4 @@ export default class OrderDepth extends PureComponent {
 OrderDepth.propTypes = {
   depth: PropTypes.instanceOf(Immutable.Map).isRequired,
   side: PropTypes.string.isRequired,
-  subscribe: PropTypes.func.isRequired,
 };

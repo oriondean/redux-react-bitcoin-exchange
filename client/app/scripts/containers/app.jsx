@@ -16,6 +16,10 @@ import OrderEntry from '../components/order-entry/order-entry';
 import TradeHistory from '../components/trade-history/trade-history';
 
 class App extends PureComponent {
+  componentWillMount() {
+    this.props.retrieveState();
+  }
+
   render() {
     return (
       <div>
@@ -26,12 +30,10 @@ class App extends PureComponent {
               <OrderDepth
                 side={OrderAction.ASK}
                 depth={this.props.askDepth}
-                subscribe={this.props.subscribeOrderDepth}
               />
               <OrderDepth
                 side={OrderAction.BID}
                 depth={this.props.bidDepth}
-                subscribe={this.props.subscribeOrderDepth}
               />
             </div>
             <div className="col-lg-7 main">
@@ -62,7 +64,6 @@ class App extends PureComponent {
             <div className="col-lg-3">
               <TradeHistory
                 trades={this.props.trades}
-                subscribe={this.props.subscribeTradeHistory}
               />
             </div>
           </div>
@@ -71,7 +72,6 @@ class App extends PureComponent {
               <OrderBook
                 orders={this.props.orders}
                 account={this.props.selectedAccount}
-                subscribe={this.props.subscribeOrderBook}
               />
             </div>
           </div>
@@ -88,9 +88,7 @@ App.propTypes = {
   orders: PropTypes.instanceOf(Immutable.Map).isRequired,
   trades: PropTypes.instanceOf(Immutable.List).isRequired,
   selectedAccount: PropTypes.string.isRequired,
-  subscribeOrderBook: PropTypes.func.isRequired,
-  subscribeOrderDepth: PropTypes.func.isRequired,
-  subscribeTradeHistory: PropTypes.func.isRequired,
+  retrieveState: PropTypes.func.isRequired,
   changeAccount: PropTypes.func.isRequired,
   submitOrder: PropTypes.func.isRequired,
 };
@@ -105,11 +103,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  subscribeOrderBook: account => dispatch(ActionCreators.subscribeOrderBook(account)),
-  subscribeOrderDepth: () => dispatch(ActionCreators.subscribeOrderDepth()),
-  subscribeTradeHistory: () => dispatch(ActionCreators.subscribeTradeHistory()),
+  retrieveState: () => dispatch(ActionCreators.retrieveState()),
   changeAccount: account => dispatch(ActionCreators.changeAccount(account)),
-  submitOrder: order => ActionCreators.submitOrder(order),
+  submitOrder: order => dispatch(ActionCreators.submitOrder(order)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

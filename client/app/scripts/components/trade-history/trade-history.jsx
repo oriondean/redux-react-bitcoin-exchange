@@ -6,10 +6,6 @@ import TradeHistoryItem from './trade-history-item';
 import './trade-history.scss';
 
 export default class TradeHistory extends PureComponent {
-  componentWillMount() {
-    this.props.subscribe();
-  }
-
   render() {
     const trades = this.props.trades.map((trade, index) => (
       <TradeHistoryItem key={String(index)} trade={trade} />
@@ -34,5 +30,4 @@ export default class TradeHistory extends PureComponent {
 
 TradeHistory.propTypes = {
   trades: PropTypes.instanceOf(Immutable.List).isRequired,
-  subscribe: PropTypes.func.isRequired,
 };

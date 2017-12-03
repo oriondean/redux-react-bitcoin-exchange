@@ -7,10 +7,6 @@ import OrderBookItem from './order-book-item';
 import './order-book.scss';
 
 export default class OrderBook extends PureComponent {
-  componentWillMount() {
-    this.props.subscribe(this.props.account);
-  }
-
   render() {
     const orders = this.props.orders.valueSeq()
       .sortBy(order => order.get('created'))
@@ -30,6 +26,4 @@ export default class OrderBook extends PureComponent {
 
 OrderBook.propTypes = {
   orders: PropTypes.instanceOf(Immutable.Map).isRequired,
-  account: PropTypes.string.isRequired,
-  subscribe: PropTypes.func.isRequired,
 };
