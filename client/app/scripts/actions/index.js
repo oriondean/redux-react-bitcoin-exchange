@@ -21,22 +21,22 @@ const handleResponse = (data, dispatch) => {
   });
 };
 
-export const changeAccount = account => (
-  (dispatch) => {
-    // Socket.emit('private-order-book', account);
-    dispatch({
-      type: ActionTypes.CHANGE_ACCOUNT,
-      account,
-    });
-  }
-);
-
 export const retrieveState = () => (
   (dispatch, getState) => (
     fetch(`${host}/state/${getState().accounts.selected}`, { method: 'GET', headers })
       .then(res => res.json())
       .then(data => handleResponse(data, dispatch))
   )
+);
+
+export const changeAccount = account => (
+  (dispatch) => {
+    dispatch({
+      type: ActionTypes.CHANGE_ACCOUNT,
+      account,
+    });
+    dispatch(retrieveState());
+  }
 );
 
 export const submitOrder = order => (
