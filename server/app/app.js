@@ -58,10 +58,12 @@ app.post('/order', (req, res) => {
   const price = parseFloat(req.body.price);
   const quantity = parseFloat(req.body.quantity);
 
-
-  matcher.onNewOrder(new Order(orderID += 1, price, quantity, action, account));
-
-  res.json(state);
+  try {
+    matcher.onNewOrder(new Order(orderID += 1, price, quantity, action, account));
+    res.json(state);
+  } catch (e) {
+    res.status(500).send();
+  }
 });
 
 app.listen(3000);
