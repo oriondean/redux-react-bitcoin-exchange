@@ -18,6 +18,13 @@ const state = {
   tradeHistory: [],
 };
 
+const getState = account => ({
+  bidAggregatedOrderBook: state.bidAggregatedOrderBook.orderBook,
+  askAggregatedOrderBook: state.askAggregatedOrderBook.orderBook,
+  privateOrderBook: state.privateOrderBook.get(account),
+  tradeHistory: state.tradeHistory,
+});
+
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -47,11 +54,11 @@ matcher.on('partially-matched-order', (newOrder, oldOrder, matchedQuantity) => {
   orderBook.reduce(newOrder.price, matchedQuantity);
 });
 
-app.get('/state', (req, res) => res.json(state));
+app.get('/state/:account', (req, res) => res.json(getState(req.params.account)));
 app.get('/trade-history', (req, res) => res.json(state.tradeHistory));
 app.get('/private-order-book/:account', (req, res) => res.json(state.privateOrderBook.get(req.params.account)));
 app.get('/order-book/:side', (req, res) => {
-  res.json(req.params.side === 'bid' ? state.bidAggregatedOrderBook : state.askAggregatedOrderBook);
+  res.json(req.params.side === 'bid' ? state.bidAggregatedOrderBook.orderBook : state.askAggregatedOrderBook.orderBook);
 });
 
 app.post('/order', (req, res) => {
@@ -61,7 +68,7 @@ app.post('/order', (req, res) => {
 
   try {
     matcher.onNewOrder(new Order(orderID += 1, price, quantity, action, account));
-    res.json(state);
+    res.json(getState(account));
   } catch (e) {
     res.status(500).send();
   }
