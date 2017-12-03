@@ -21,9 +21,6 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         include: scripts,
-        options: {
-          presets: ['es2015', 'react'],
-        },
       },
       {
         test: /\.html$/,
