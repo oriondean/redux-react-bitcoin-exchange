@@ -19,7 +19,7 @@ Util.inherits(Matcher, EventEmitter);
  * Attempts to match new order with existing orders, otherwise adds it to be matched
  * @param newOrder
  */
-Matcher.prototype.onNewOrder = (newOrder) => {
+Matcher.prototype.onNewOrder = function onNewOrder(newOrder) {
   const order = this.match(newOrder, newOrder.isBid() ? this.askOrders : this.bidOrders);
 
   if (order) {
@@ -42,7 +42,7 @@ Matcher.prototype.onNewOrder = (newOrder) => {
  * @param toMatchAgainst potential orders that can be matched
  * @returns {order} null if order has been fully matched, otherwise remaining part of order
  */
-Matcher.prototype.match = (toMatch, toMatchAgainst) => {
+Matcher.prototype.match = function match(toMatch, toMatchAgainst) {
   let order = toMatch;
   const candidates = toMatchAgainst.slice(0);
 

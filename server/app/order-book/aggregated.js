@@ -2,7 +2,7 @@ function AggregatedOrderBook() {
   this.orderBook = {};
 }
 
-AggregatedOrderBook.prototype.add = (order) => {
+AggregatedOrderBook.prototype.add = function add(order) {
   if (this.orderBook[order.price]) {
     this.orderBook[order.price] += order.quantity;
     return { type: 'change', data: { price: order.price, quantity: this.orderBook[order.price] } };
@@ -12,7 +12,7 @@ AggregatedOrderBook.prototype.add = (order) => {
   return { type: 'new', data: { price: order.price, quantity: this.orderBook[order.price] } };
 };
 
-AggregatedOrderBook.prototype.reduce = (price, quantity) => {
+AggregatedOrderBook.prototype.reduce = function reduce(price, quantity) {
   this.orderBook[price] -= quantity;
 
   if (this.orderBook[price] === 0) {
