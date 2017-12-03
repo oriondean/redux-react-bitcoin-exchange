@@ -47,10 +47,11 @@ matcher.on('partially-matched-order', (newOrder, oldOrder, matchedQuantity) => {
   orderBook.reduce(newOrder.price, matchedQuantity);
 });
 
+app.get('/state', (req, res) => res.json(state));
 app.get('/trade-history', (req, res) => res.json(state.tradeHistory));
 app.get('/private-order-book/:account', (req, res) => res.json(state.privateOrderBook.get(req.params.account)));
 app.get('/order-book/:side', (req, res) => {
-  res.json(req.params.side === 'bid' ? state.bidAggregatedOrderBook.orderBook : state.askAggregatedOrderBook.orderBook);
+  res.json(req.params.side === 'bid' ? state.bidAggregatedOrderBook : state.askAggregatedOrderBook);
 });
 
 app.post('/order', (req, res) => {
