@@ -42,9 +42,8 @@ Matcher.prototype.onNewOrder = function onNewOrder(newOrder) {
  * @param toMatchAgainst potential orders that can be matched
  * @returns {order} null if order has been fully matched, otherwise remaining part of order
  */
-Matcher.prototype.match = function match(toMatch, toMatchAgainst) {
+Matcher.prototype.match = function match(toMatch, candidates) {
   let order = toMatch;
-  const candidates = toMatchAgainst.slice(0);
 
   while (!!candidates[0] && order.canMatch(candidates[0])) {
     const existingOrder = candidates[0];
@@ -63,6 +62,7 @@ Matcher.prototype.match = function match(toMatch, toMatchAgainst) {
 
       order = order.reduceQuantity(existingOrder.quantity);
     } else {
+      // eslint-disable-next-line no-param-reassign
       candidates[0] = existingOrder.reduceQuantity(order.quantity); // existing partially matched
       this.emit('partially-matched-order', candidates[0], existingOrder, matchedQuantity);
 
