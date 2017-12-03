@@ -1,4 +1,4 @@
 module.exports = {
-    BID: "bid",
-    ASK: "ask"
+  BID: 'bid',
+  ASK: 'ask',
 };
