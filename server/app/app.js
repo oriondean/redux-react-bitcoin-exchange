@@ -20,6 +20,13 @@ const state = {
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 matcher.on('new-trade', trade => state.tradeHistory.unshift(trade));
 
 matcher.on('new-order', (order) => {
