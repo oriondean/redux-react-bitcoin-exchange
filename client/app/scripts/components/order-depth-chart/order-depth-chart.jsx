@@ -93,7 +93,9 @@ export default class OrderDepthChart extends PureComponent {
         <h5 className="header">ORDER DEPTH CHART</h5>
         <div
           className="order-depth-chart"
-          ref={(chart) => { this.chart = chart; }}
+          ref={(chart) => {
+            this.chart = chart;
+          }}
         />
       </div>
     );
