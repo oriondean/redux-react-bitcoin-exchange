@@ -1,25 +1,32 @@
 {
-  "name": "bitcoin-exchange-2-server",
+  "name": "redux-react-bitcoin-exchange-server",
   "version": "0.0.1",
   "description": "Server-side code for bitcoin exchange 2",
   "author": "Dean Kerr <dean_k@live.co.uk>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oriondean/bitcoin-exchange-2"
+    "url": "https://github.com/oriondean/redux-react-bitcoin-exchange"
   },
   "bugs": {
-    "url": "https://github.com/oriondean/bitcoin-exchange-2/issues"
+    "url": "https://github.com/oriondean/redux-react-bitcoin-exchange/issues"
   },
   "keywords": [
     "bitcoin",
     "bitcoin-exchange"
   ],
   "dependencies": {
-    "underscore": "1.8.3",
-    "socket.io": "^1.4.4"
+    "express": "^4.16.2"
   },
   "devDependencies": {
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1",
     "jasmine": "2.4.1"
+  },
+  "scripts": {
+    "lint": "eslint app"
   },
   "private": true,
   "license": "MIT"
