@@ -1,17 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class OrderDepthItem extends React.Component {
-    render() {
-        const priceClass = 'price right ' + this.props.side;
-
-        return <div className="tier">
-            <span className="quantity right">{this.props.item.quantity.toFixed(9)}</span>
-            <span className={priceClass}>{parseFloat(this.props.item.price).toFixed(3)}</span>
-        </div>
-    }
-}
+const OrderDepthItem = ({ item, side }) => (
+  <div className="tier">
+    <span className="quantity right">{item.quantity.toFixed(9)}</span>
+    <span className={`price right ${side}`}>
+      {parseFloat(item.price).toFixed(3)}
+    </span>
+  </div>
+);
 
 OrderDepthItem.propTypes = {
-    item: React.PropTypes.object.isRequired,
-    side: React.PropTypes.string.isRequired
+  item: PropTypes.shape({
+    quantity: PropTypes.number.isRequired,
+    price: PropTypes.string.isRequired,
+  }).isRequired,
+  side: PropTypes.string.isRequired,
 };
+
+export default OrderDepthItem;

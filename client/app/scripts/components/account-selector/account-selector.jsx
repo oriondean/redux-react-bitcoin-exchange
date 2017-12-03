@@ -1,29 +1,31 @@
+import Immutable from 'immutable';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './account-selector.scss';
 
-export default class AccountSelector extends React.Component {
-    render() {
-        const options = [];
+const AccountSelector = ({ accounts, selected, changeAccount }) => {
+  const options = accounts.map(account => <option key={account}>{account}</option>);
 
-        this.props.accounts.forEach(account => {
-            options.push(<option key={account}>{account}</option>)
-        });
-
-        return <div className="account-selector-container panel-container">
-            <h5 className="header">ACCOUNT SELECTOR</h5>
-            <select name="account-selector"
-                    className="form-control"
-                    value={this.props.selected}
-                    onChange={event => this.props.changeAccount(event.target.value)}>
-                {options}
-            </select>
-        </div>
-    }
-}
+  return (
+    <div className="account-selector-container panel-container">
+      <h5 className="header">ACCOUNT SELECTOR</h5>
+      <select
+        name="account-selector"
+        className="form-control"
+        value={selected}
+        onChange={event => changeAccount(event.target.value)}
+      >
+        {options}
+      </select>
+    </div>
+  );
+};
 
 AccountSelector.propTypes = {
-    selected: React.PropTypes.string.isRequired,
-    accounts: React.PropTypes.object.isRequired,
-    changeAccount: React.PropTypes.func.isRequired
+  selected: PropTypes.string.isRequired,
+  accounts: PropTypes.instanceOf(Immutable.Set).isRequired,
+  changeAccount: PropTypes.func.isRequired,
 };
+
+export default AccountSelector;

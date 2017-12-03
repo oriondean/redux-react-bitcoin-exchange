@@ -7,11 +7,11 @@ import subscriptions from './subscriptions';
 import trades from './trades';
 
 const rootReducer = combineReducers({
-    accounts,
-    orderDepth,
-    orderBook,
-    subscriptions,
-    trades
+  accounts,
+  orderDepth,
+  orderBook,
+  subscriptions,
+  trades,
 });
 
 export default rootReducer;
