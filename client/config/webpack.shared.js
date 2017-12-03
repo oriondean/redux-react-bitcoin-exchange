@@ -1,12 +1,15 @@
 const path = require('path');
 
-const scripts = path.resolve(__dirname, 'app/scripts');
+const root = path.resolve(__dirname, '..');
+const scripts = path.resolve(root, 'app/scripts');
+const styles = path.resolve(root, 'app/css');
 
 module.exports = {
   entry: path.resolve(scripts, 'index.jsx'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(root, 'dist'),
     filename: 'bundle.js',
+    publicPath: 'dist',
   },
   devtool: 'source-map',
   module: {
@@ -35,7 +38,7 @@ module.exports = {
       {
         test: /\.css$/,
         loader: ['style-loader', 'css-loader'],
-        include: path.resolve(__dirname, 'app/css'),
+        include: styles,
       },
     ],
   },

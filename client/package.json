@@ -51,8 +51,9 @@
     "socket.io-client": "^2.0.4"
   },
   "scripts": {
-    "start": "webpack-dev-server --output-public-path dist",
-    "build": "webpack",
+    "serve": "webpack-dev-server --config config/webpack.shared.js",
+    "build:dev": "webpack --config config/webpack.shared.js",
+    "build:prod": "webpack --config config/webpack.shared.js",
     "lint": "eslint app/scripts"
   },
   "private": true,
