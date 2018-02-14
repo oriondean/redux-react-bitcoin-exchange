@@ -11,6 +11,7 @@ function Matcher() {
 
   this.bidOrders = []; // sorted lowest to highest price (best offer)
   this.askOrders = []; // sorted highest to lowest price (best offer)
+  this.trades = [];
 }
 
 Util.inherits(Matcher, EventEmitter);
@@ -50,7 +51,8 @@ Matcher.prototype.match = function match(toMatch, candidates) {
     const matchedQuantity = Math.min(existingOrder.quantity, order.quantity);
 
     // match at existing order's price, and lowest quantity
-    this.emit('new-trade', new Trade(existingOrder.price, matchedQuantity, order.action));
+    this.trades.push(new Trade(existingOrder.price, matchedQuantity, order.action));
+    this.emit('new-trade', this.trades.slice(-1));
 
     if (order.quantity >= existingOrder.quantity) {
       this.emit('matched-order', existingOrder);
