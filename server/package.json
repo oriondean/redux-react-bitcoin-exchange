@@ -27,7 +27,9 @@
     "jest": "^22.3.0"
   },
   "scripts": {
-    "lint": "eslint app"
+    "lint": "eslint app",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "private": true,
   "license": "MIT"
