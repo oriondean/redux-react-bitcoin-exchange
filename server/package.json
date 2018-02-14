@@ -24,7 +24,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.0",
-    "jasmine": "^2.9.0"
+    "jest": "^22.3.0"
   },
   "scripts": {
     "lint": "eslint app"
